@@ -1,6 +1,6 @@
-#POINTER
+# POINTER
 
-#Application.properties
+# Application.properties
 spring.data.mongodb.host=
 spring.data.mongodb.username=
 spring.data.mongodb.password=
@@ -15,7 +15,7 @@ server.ssl.key-store-type=PKCS12
 server.ssl.key-alias=tomcat
 server.ssl.key-password=password
 
-#1. Generate a self-signed SSL certificate
+# 1. Generate a self-signed SSL certificate
 First of all, we need to generate a pair of cryptographic keys, use them to produce an SSL certificate and store it in a keystore. The keytool documentation defines a keystore as a database of "cryptographic keys, X.509 certificate chains, and trusted certificates".
 
 The two most common formats used for keystores are JKS, a proprietary format specific for Java, and PKCS12, an industry-standard format. JKS used to be the default choice, but now Oracle recommends to adopt the PKCS12 format. We're going to see how to use both.
@@ -33,7 +33,7 @@ The two most common formats used for keystores are JKS, a proprietary format spe
 - storepass: a password for the keystore.
 
 
-#2. Enable HTTPS in Spring Boot
+# 2. Enable HTTPS in Spring Boot
 Whether our keystore contains a self-signed certificate or one issued by a trusted Certificate Authority, we can now set up Spring Boot to accept requests over HTTPS instead of HTTP by using that certificate.
 
 The first thing to do is placing the keystore file inside the Spring Boot project. We want to put it in the resources folder or the root folder.
@@ -46,7 +46,7 @@ server.ssl.key-store-type=PKCS12
 server.ssl.key-alias=tomcat
 server.ssl.key-password=password
 
-#3. Distribute the SSL certificate to clients
+# 3. Distribute the SSL certificate to clients
 When using a self-signed SSL certificate, our browser won't trust our application and will warn the user that it's not secure. And that'll be the same with any other client.
 
 It's possible to make a client trust our application by providing it with our certificate.
