@@ -1,21 +1,20 @@
 # POINTER
 
 # Application.properties
-`
-spring.data.mongodb.host=
-spring.data.mongodb.username=
-spring.data.mongodb.password=
-spring.data.mongodb.port=
-spring.data.mongodb.database=
+`spring.data.mongodb.host=`
+`spring.data.mongodb.username=`
+`spring.data.mongodb.password=`
+`spring.data.mongodb.port=`
+`spring.data.mongodb.database=`
 
-server.port=8443
+`server.port=8443`
 
-server.ssl.key-store=classpath:keystore.p12
-server.ssl.key-store-password=password
-server.ssl.key-store-type=PKCS12
-server.ssl.key-alias=tomcat
-server.ssl.key-password=password
-`
+`server.ssl.key-store=classpath:keystore.p12`
+`server.ssl.key-store-password=password`
+`server.ssl.key-store-type=PKCS12`
+`server.ssl.key-alias=tomcat`
+`server.ssl.key-password=password`
+
 # 1. Generate a self-signed SSL certificate
 First of all, we need to generate a pair of cryptographic keys, use them to produce an SSL certificate and store it in a keystore. The keytool documentation defines a keystore as a database of "cryptographic keys, X.509 certificate chains, and trusted certificates".
 
