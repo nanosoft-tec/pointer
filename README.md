@@ -2,17 +2,25 @@
 
 # Application.properties
 `spring.data.mongodb.host=`
+
 `spring.data.mongodb.username=`
+
 `spring.data.mongodb.password=`
+
 `spring.data.mongodb.port=`
+
 `spring.data.mongodb.database=`
 
 `server.port=8443`
 
 `server.ssl.key-store=classpath:keystore.p12`
+
 `server.ssl.key-store-password=password`
+
 `server.ssl.key-store-type=PKCS12`
+
 `server.ssl.key-alias=tomcat`
+
 `server.ssl.key-password=password`
 
 # 1. Generate a self-signed SSL certificate
@@ -40,11 +48,15 @@ The first thing to do is placing the keystore file inside the Spring Boot projec
 
 Then, we configure the server to use our brand new keystore and enable https.
 
-server.ssl.key-store=classpath:keystore.p12
-server.ssl.key-store-password=password
-server.ssl.key-store-type=PKCS12
-server.ssl.key-alias=tomcat
-server.ssl.key-password=password
+`server.ssl.key-store=classpath:keystore.p12`
+
+`server.ssl.key-store-password=password`
+
+`server.ssl.key-store-type=PKCS12`
+
+`server.ssl.key-alias=tomcat`
+
+`server.ssl.key-password=password`
 
 # 3. Distribute the SSL certificate to clients
 When using a self-signed SSL certificate, our browser won't trust our application and will warn the user that it's not secure. And that'll be the same with any other client.
