@@ -10,7 +10,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MarkRepository extends MongoRepository<Mark, String> {
-    List<Mark> findByDate(LocalDate now);
 
-    List<Mark> findByDateBetweenAndCompany(LocalDateTime startPeriod, LocalDateTime endPeriod, Company company, Sort sort);
+  List<Mark> findByUserIdAndDateBetweenAndCompany(
+      String userId,
+      LocalDateTime startPeriod,
+      LocalDateTime endPeriod,
+      Company company,
+      Sort sort);
+
+  List<Mark> findByDateAndUserId(LocalDate now, String userId);
 }

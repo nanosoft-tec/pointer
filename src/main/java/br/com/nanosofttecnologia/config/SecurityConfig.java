@@ -1,16 +1,9 @@
 package br.com.nanosofttecnologia.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -36,28 +29,6 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Qualifier("customUserDetailsService")
-  @Autowired
-  private UserDetailsService userDetailsService;
-
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-    authenticationProvider.setUserDetailsService(userDetailsService);
-    authenticationProvider.setPasswordEncoder(passwordEncoder());
-    return authenticationProvider;
-  }
-
-  @Autowired
-  public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-    auth.authenticationProvider(authenticationProvider());
-  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
@@ -67,12 +38,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/*")
         .permitAll()
         .antMatchers("/secure/**")
-        .fullyAuthenticated()
-        .and()
-        .formLogin()
+        .authenticated()
         .and()
         .csrf()
-        .csrfTokenRepository(csrfTokenRepository());
+        .csrfTokenRepository(csrfTokenRepository())
+        .and()
+        .oauth2Login()
+        .and()
+        .logout()
+        .clearAuthentication(true)
+        .deleteCookies()
+        .invalidateHttpSession(true);
 
     http.headers()
         .defaultsDisabled()

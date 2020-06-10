@@ -5,7 +5,6 @@ import br.com.nanosofttecnologia.dto.PointDTO;
 import br.com.nanosofttecnologia.model.Company;
 import br.com.nanosofttecnologia.model.Mark;
 import br.com.nanosofttecnologia.model.TypeEnum;
-import br.com.nanosofttecnologia.model.User;
 import br.com.nanosofttecnologia.repository.CompanyRepository;
 import br.com.nanosofttecnologia.repository.MarkRepository;
 import br.com.nanosofttecnologia.util.DataTableRequest;
@@ -13,6 +12,7 @@ import br.com.nanosofttecnologia.util.DataTableResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +37,9 @@ public class MarkRestController {
       consumes = APPLICATION_JSON_VALUE,
       produces = APPLICATION_JSON_VALUE)
   public DataTableResponse listCurrentDay(@RequestBody DataTableRequest request) {
-    List<Mark> marks = markRepository.findByDate(LocalDate.now());
+    OAuth2User user =
+        (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    List<Mark> marks = markRepository.findByDateAndUserId(LocalDate.now(), user.getName());
     return request.getResponse(marks.size(), marks.size(), marks);
   }
 
@@ -46,6 +48,8 @@ public class MarkRestController {
       consumes = APPLICATION_JSON_VALUE,
       produces = APPLICATION_JSON_VALUE)
   public DataTableResponse list(@RequestBody DataTableRequest request) {
+    OAuth2User user =
+        (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     List<PointDTO> points = new ArrayList<>();
 
     String companyId = request.getObject().get("companyId").toString();
@@ -60,7 +64,8 @@ public class MarkRestController {
           companyRepository.findById(companyId).orElseThrow(() -> new NoSuchElementException());
 
       List<Mark> marks =
-          markRepository.findByDateBetweenAndCompany(
+          markRepository.findByUserIdAndDateBetweenAndCompany(
+              user.getName(),
               startPeriod,
               endPeriod,
               company,
@@ -79,6 +84,22 @@ public class MarkRestController {
       processMarkPoint(points, marksByDate);
     }
     return request.getResponse(points.size(), points.size(), points);
+  }
+
+  @PostMapping(
+      value = "/secure/mark",
+      consumes = APPLICATION_JSON_VALUE,
+      produces = APPLICATION_JSON_VALUE)
+  public Mark save(@RequestBody MarkDTO dto) {
+    OAuth2User user =
+        (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Mark mark = new Mark();
+    mark.setUserId(user.getName());
+    mark.setDate(dto.getDate().toLocalDate());
+    mark.setTime(dto.getDate().toLocalTime());
+    mark.setType(TypeEnum.valueOf(dto.getTypeId()));
+    mark.setCompany(companyRepository.findById(dto.getCompanyId()).get());
+    return markRepository.save(mark);
   }
 
   private void processMarkPoint(List<PointDTO> points, Map<LocalDate, List<Mark>> marksByDate) {
@@ -125,23 +146,8 @@ public class MarkRestController {
     point.setDate("");
     point.setInputTime("");
     point.setOutputTime("");
-    point.setSumTime((missingMark ?  "*" : "") + getDurationString(totalTime));
+    point.setSumTime((missingMark ? "*" : "") + getDurationString(totalTime));
     points.add(point);
-  }
-
-  @PostMapping(
-      value = "/secure/mark",
-      consumes = APPLICATION_JSON_VALUE,
-      produces = APPLICATION_JSON_VALUE)
-  public Mark save(@RequestBody MarkDTO dto) {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    Mark mark = new Mark();
-    mark.setUserId(user.getId());
-    mark.setDate(dto.getDate().toLocalDate());
-    mark.setTime(dto.getDate().toLocalTime());
-    mark.setType(TypeEnum.valueOf(dto.getTypeId()));
-    mark.setCompany(companyRepository.findById(dto.getCompanyId()).get());
-    return markRepository.save(mark);
   }
 
   private String getDurationString(long seconds) {

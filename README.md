@@ -23,6 +23,11 @@
 
 `server.ssl.key-password=password`
 
+`spring.security.oauth2.client.registration.github.client-id=`
+
+`spring.security.oauth2.client.registration.github.client-secret=`
+
+
 # 1. Generate a self-signed SSL certificate
 First of all, we need to generate a pair of cryptographic keys, use them to produce an SSL certificate and store it in a keystore. The keytool documentation defines a keystore as a database of "cryptographic keys, X.509 certificate chains, and trusted certificates".
 
