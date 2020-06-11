@@ -65,13 +65,13 @@
                             <goal>build</goal>
                         </goals>
                     </execution>
-                    <execution>
+                    <!--<execution>
                         <id>default-push</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>push</goal>
                         </goals>
-                    </execution>
+                    </execution>-->
                 </executions>
                 <configuration>
                     <repository>docker.pkg.github.com/nanosoft-tec/pointer/${project.artifactId}</repository>
