@@ -2,11 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.0.RELEASE</version>
     </parent>
+
     <groupId>br.com.nanosofttecnologia</groupId>
     <artifactId>pointer</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -15,6 +17,13 @@
     <properties>
         <java.version>11</java.version>
     </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:nanosoft-tec/pointer.git</connection>
+        <developerConnection>scm:git:git@github.com:nanosoft-tec/pointer.git</developerConnection>
+        <url>scm:git:git@github.com:nanosoft-tec/pointer.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -94,4 +103,5 @@
             <url>https://maven.pkg.github.com/nanosoft-tec/pointer</url>
         </repository>
     </distributionManagement>
+
 </project>
